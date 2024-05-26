@@ -1,4 +1,4 @@
-import './index.css';
+import "./global.css";
 
 import AppRoutes  from './AppRoutes';
 import React from 'react';
