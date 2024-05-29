@@ -7,7 +7,7 @@ const Header = () => {
          <Link
             to='/'
             className="text-3x1 font-bold tracking-tight text-orange-500">
-            Mealie
+            Mealie.io
          </Link>
       </div>
     </div>
