@@ -4,7 +4,7 @@ import { Button } from './ui/button';
 import { Menu } from 'lucide-react';
 import { Separator } from './ui/separator';
 
-const MobileNav = () => {
+const MobileNav: React.FC = () => {
   return (
     <Sheet>
       <SheetTrigger>

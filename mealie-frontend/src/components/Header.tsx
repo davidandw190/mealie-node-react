@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import MainNav from "./MainNav";
 import MobileNav from "./MobileNav";
 
-const Header = () => {
+const Header: React.FC = () => {
   return (
     <div className='border-b-2 border-b-orange-500 py-6'>
       <div className='container mx-auto flex justify-between items-center'>

@@ -1,6 +1,6 @@
 import hero from '../assets/hero.png';
 
-const Hero = () => {
+const Hero: React.FC = () => {
   return (
     <div>
       <img src={hero} className='w-full max-h-[600px] object-cover' />
