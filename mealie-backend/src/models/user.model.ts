@@ -13,7 +13,7 @@ const userSchema: Schema = new Schema(
   {
     auth0_id: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true, match: /.+\@.+\..+/ },
-    name: { type: String, required: true },
+    name: { type: String, required: false },
     addressLine1: { type: String, required: false },
     city: { type: String, required: false },
     country: { type: String, required: false },
