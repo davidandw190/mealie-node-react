@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 
 import UserModel from '../models/user.model';
 
-export const createCurrentUser = async (req: Request, res: Response): Promise<void> => {
+export const createUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const { auth0_id } = req.body;
 
@@ -27,3 +27,26 @@ export const createCurrentUser = async (req: Request, res: Response): Promise<vo
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
+export const updateUser = async (req: Request, res: Response) => {
+  try {
+    const { name, addressLine1, city, country } = req.body;
+    const user = await UserModel.findById(req.userId).exec();
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (name !== undefined) user.name = name;
+    if (addressLine1 !== undefined) user.addressLine1 = addressLine1;
+    if (city !== undefined) user.city = city;
+    if (country !== undefined) user.country = country;
+
+    await user.save();
+
+    res.status(200).json(user.toObject());
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
