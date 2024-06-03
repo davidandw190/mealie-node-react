@@ -1,4 +1,3 @@
-import { updateUser } from '../../../mealie-backend/src/resources/user.resource';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useMutation } from 'react-query';
 
@@ -80,5 +79,5 @@ export const useUpdateUser = () => {
     reset();
   }
 
-  return { updateUser, isLoading };
+  return { updateUser, isLoading, isSuccess };
 };

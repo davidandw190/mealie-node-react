@@ -3,7 +3,6 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import AuthCallbackPage from './pages/AuthCallbackPage';
 import HomePage from './pages/HomePage';
 import Layout from './layouts/layout';
-import UserProfileForm from './forms/user-profile-form/UserProfileForm';
 import UserProfilePage from './pages/UserProfilePage';
 
 const AppRoutes = () => {
