@@ -7,11 +7,12 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import React, { useEffect } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import LoadingButton from '@/components/LoadingButton';
-import React from 'react';
+import { User } from '@/types/types';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -30,16 +31,23 @@ type Props = {
   onSubmit: (data: UserFormData) => void;
   isLoading: boolean;
   buttonText?: string;
+  currentUser: User;
 };
 
 const UserProfileForm: React.FC<Props> = ({
   onSubmit,
   isLoading,
   buttonText = 'Update Profile',
+  currentUser,
 }: Props) => {
   const form = useForm<UserFormData>({
     resolver: zodResolver(formSchema),
+    defaultValues: currentUser,
   });
+
+  useEffect(() => {
+    form.reset(currentUser);
+  }, [currentUser, form]);
 
   return (
     <Form {...form}>

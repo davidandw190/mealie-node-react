@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from 'react-query';
 
+import { User } from '@/types/types';
 import { toast } from 'sonner';
 import { useAuth0 } from '@auth0/auth0-react';
 
@@ -20,7 +21,7 @@ type UpdateUserRequest = {
 export const useRetrieveAuthenticatedUser = () => {
   const { getAccessTokenSilently } = useAuth0();
 
-  const retrieveAuthenticatedUserRequest = async () => {
+  const retrieveAuthenticatedUserRequest = async (): Promise<User> => {
     const accessToken = await getAccessTokenSilently();
 
     const response = await fetch(`${API_BASE_URL}/api/users`, {
