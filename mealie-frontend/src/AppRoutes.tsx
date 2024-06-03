@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import AuthCallbackPage from './pages/AuthCallbackPage';
 import HomePage from './pages/HomePage';
 import Layout from './layouts/layout';
+import ProtectedRoute from './auth/ProtectedRoute';
 import UserProfilePage from './pages/UserProfilePage';
 
 const AppRoutes = () => {
@@ -17,6 +18,8 @@ const AppRoutes = () => {
         }
       />
       <Route path='/auth' element={<AuthCallbackPage />} />
+      
+      <Route element={<ProtectedRoute />}>
       <Route
         path='/user-profile'
         element={
@@ -24,7 +27,9 @@ const AppRoutes = () => {
             <UserProfilePage />
           </Layout>
         }
-      />
+      />  
+      </Route>
+      
       <Route path='/about' element={<span>About Page</span>} />
       <Route path='*' element={<Navigate to='/' />} />
     </Routes>
