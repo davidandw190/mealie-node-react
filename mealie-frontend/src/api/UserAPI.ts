@@ -1,3 +1,4 @@
+import { updateUser } from '../../../mealie-backend/src/resources/user.resource';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useMutation } from 'react-query';
 
@@ -8,9 +9,16 @@ type CreateUserRequest = {
   email: string;
 };
 
+type UpdateUserRequest = {
+  name: string;
+  addressLine1: string;
+  city: string;
+  country: string;
+};
+
 export const useCreateUser = () => {
   const { getAccessTokenSilently } = useAuth0();
-  
+
   const createUserRequest = async (user: CreateUserRequest) => {
     const accessToken = await getAccessTokenSilently();
     const response = await fetch(`${API_BASE_URL}/api/users`, {
@@ -27,17 +35,50 @@ export const useCreateUser = () => {
     }
   };
 
-  const {
-    mutateAsync: createUser,
-    isLoading,
-    isError,
-    isSuccess,
-  } = useMutation(createUserRequest);
+  const { mutateAsync: createUser, isLoading, isError, isSuccess } = useMutation(createUserRequest);
 
   return {
     createUser,
     isLoading,
     isError,
-    isSuccess
+    isSuccess,
+  };
+};
+
+export const useUpdateUser = () => {
+  const { getAccessTokenSilently } = useAuth0();
+
+  const updateUserRequest = async (formData: UpdateUserRequest) => {
+    const accessToken = await getAccessTokenSilently();
+
+    const response = await fetch(`${API_BASE_URL}/api/users`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update user');
+    }
+
+    return response.json();
+  };
+
+  const {
+    mutateAsync: updateUser,
+    isLoading,
+    error,
+    isSuccess,
+    reset,
+  } = useMutation(updateUserRequest);
+
+  if (error) {
+    console.error(error);
+    reset();
   }
+
+  return { updateUser, isLoading };
 };

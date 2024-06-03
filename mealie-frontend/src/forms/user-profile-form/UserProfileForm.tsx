@@ -5,6 +5,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from '@/components/ui/form';
 
 import { Button } from '@/components/ui/button';
@@ -31,11 +32,11 @@ type Props = {
   buttonText?: string;
 };
 
-const UserProfileForm: React.FC<Props> = ({ 
+const UserProfileForm: React.FC<Props> = ({
   onSubmit,
   isLoading,
-  buttonText = 'Update Profile'
- }: Props) => {
+  buttonText = 'Update Profile',
+}: Props) => {
   const form = useForm<UserFormData>({
     resolver: zodResolver(formSchema),
   });
@@ -73,6 +74,7 @@ const UserProfileForm: React.FC<Props> = ({
               <FormControl>
                 <Input {...field} className='bg-white' />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -87,6 +89,7 @@ const UserProfileForm: React.FC<Props> = ({
                 <FormControl>
                   <Input {...field} className='bg-white' />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -100,6 +103,7 @@ const UserProfileForm: React.FC<Props> = ({
                 <FormControl>
                   <Input {...field} className='bg-white' />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -113,6 +117,7 @@ const UserProfileForm: React.FC<Props> = ({
                 <FormControl>
                   <Input {...field} className='bg-white' />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
