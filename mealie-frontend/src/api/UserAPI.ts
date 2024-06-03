@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useMutation } from 'react-query';
 
@@ -74,10 +75,17 @@ export const useUpdateUser = () => {
     reset,
   } = useMutation(updateUserRequest);
 
+  if (isSuccess) {
+    toast.success('Profile updated successfully.');
+  }
+
   if (error) {
     console.error(error);
+    toast.error(error.toString());
     reset();
   }
+
+  
 
   return { updateUser, isLoading, isSuccess };
 };
