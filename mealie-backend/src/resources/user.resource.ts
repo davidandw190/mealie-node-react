@@ -2,6 +2,20 @@ import { Request, Response } from 'express';
 
 import UserModel from '../models/user.model';
 
+export const getUser = async (req: Request, res: Response) => {
+  try {
+    const user = await UserModel.findById(req.userId).exec();
+    if (!user) {
+      return res.status(404).json({ message: 'User was not found' });
+    }
+
+    res.json(user.toObject());
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal Server Error'})
+  }
+}
+
 export const createUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const { auth0_id } = req.body;
