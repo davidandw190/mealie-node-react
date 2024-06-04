@@ -18,11 +18,11 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 const formSchema = z.object({
-  email: z.string().optional(),
-  name: z.string().min(3, { message: 'Name is required' }),
+  email: z.string().email('Invalid email address').optional(),
+  name: z.string().min(3, { message: 'Name must be at least 3 characters long' }),
   addressLine1: z.string().min(1, { message: 'Address Line 1 is required' }),
-  city: z.string().min(3, { message: 'City is required' }),
-  country: z.string().min(3, { message: 'Country is required' }),
+  city: z.string().min(3, { message: 'City must be at least 3 characters long' }),
+  country: z.string().min(3, { message: 'Country must be at least 3 characters long' }),
 });
 
 type UserFormData = z.infer<typeof formSchema>;
@@ -57,7 +57,7 @@ const UserProfileForm: React.FC<Props> = ({
       >
         <div>
           <h2 className='text-2x1 font-bold'> User Profile Form</h2>
-          <FormDescription>View and change your profile information here</FormDescription>
+          <FormDescription>View and update your profile information below.</FormDescription>
         </div>
 
         <FormField
@@ -134,8 +134,8 @@ const UserProfileForm: React.FC<Props> = ({
         {isLoading ? (
           <LoadingButton />
         ) : (
-          <Button type='submit' className='bg-orage-500'>
-            {buttonText || 'Submit'}
+          <Button type='submit' className='bg-orange-500'>
+            {buttonText}
           </Button>
         )}
       </form>
