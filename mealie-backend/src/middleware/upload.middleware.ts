@@ -1,18 +1,12 @@
-import AWS from 'aws-sdk';
 import multer from 'multer';
 // @ts-ignore
 import multerS3 from 'multer-s3';
 import path from 'path';
+import s3 from '../config/aws.config';
 
-AWS.config.update({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: process.env.AWS_REGION,
-});
+const allowedMimeTypes = ['image/jpeg', 'image/png'];
 
-const s3 = new AWS.S3();
-
-const uploadImage = multer({
+const upload = multer({
   storage: multerS3({
     s3: s3,
     bucket: process.env.AWS_BUCKET_NAME! as string,
@@ -25,7 +19,7 @@ const uploadImage = multer({
     },
   }),
   fileFilter: (req, file, cb) => {
-    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    if (allowedMimeTypes.includes(file.mimetype))  {
       cb(null, true);
     } else {
       // @ts-ignore
@@ -37,4 +31,4 @@ const uploadImage = multer({
   },
 });
 
-export default uploadImage;
+export default upload;
