@@ -1,3 +1,4 @@
+import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
@@ -17,11 +18,13 @@ console.log(`Environment file: ${envLoaded.parsed?.NODE_ENV}`);
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.connect(`${process.env.DB_URI_LOCAL}`)
 .then(() => {
   console.log('Successfully connected to MongoDB');
 });
+
 app.use('/api/users', userRoutes);
 app.use('/api/restaurants', restaurantRoutes);
 

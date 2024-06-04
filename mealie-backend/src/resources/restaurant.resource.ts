@@ -45,7 +45,12 @@ const uploadImageToS3 = async (file: Express.Multer.File): Promise<string> => {
     ACL: 'public-read',
   };
 
-  const data = await s3.upload(params).promise();
-  return data.Location;
+  try {
+    const data = await s3.upload(params).promise();
+    return data.Location;
+  } catch (error) {
+    throw new Error('Image upload failed');
+  }
+
 };
 
