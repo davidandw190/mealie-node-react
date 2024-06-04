@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 
 import UserModel from '../models/user.model';
 import { auth } from 'express-oauth2-jwt-bearer';
+import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 
 declare global {
@@ -13,10 +14,16 @@ declare global {
   }
 }
 
+const envLoaded = dotenv.config({ path: `.env.${process.env.NODE_ENV || 'dev'}` });
+if (envLoaded.error) {
+  console.error('Failed to load environment variables:', envLoaded.error);
+  process.exit(1);
+}
+
 export const jwtCheck = auth({
-  audience: process.env.AUTH0_AUDIENCE as string,
-  issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL as string,
-  tokenSigningAlg: process.env.AUTH0_TOKEN_SIGNING_ALG as string,
+  audience: process.env.AUTH0_AUDIENCE,
+  issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
+  tokenSigningAlg: process.env.AUTH0_TOKEN_SIGNING_ALG,
 });
 
 export const jwtParse = async (req: Request, res: Response, next: NextFunction) => {
