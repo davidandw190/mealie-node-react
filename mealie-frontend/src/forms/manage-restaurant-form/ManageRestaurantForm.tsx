@@ -1,5 +1,7 @@
+import CuisinesSection from './CuisinesSection';
 import DetailsSection from './DetailsSection';
 import { Form } from '@/components/ui/form';
+import { Separator } from '@/components/ui/separator';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -57,6 +59,8 @@ const ManageRestaurantForm = ({ onSave, isLoading }: Props) => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 bg-gray-50 p-10 rounded-1g'>
         <DetailsSection />
+        <Separator />
+        <CuisinesSection />
       </form>
     </Form>
   );
