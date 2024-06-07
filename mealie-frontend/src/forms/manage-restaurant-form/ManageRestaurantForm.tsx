@@ -1,6 +1,9 @@
+import { Button } from '@/components/ui/button';
 import CuisinesSection from './CuisinesSection';
 import DetailsSection from './DetailsSection';
 import { Form } from '@/components/ui/form';
+import ImageSection from './ImageSection';
+import LoadingButton from '@/components/LoadingButton';
 import MenuSection from './MenuSection';
 import { Separator } from '@/components/ui/separator';
 import { useForm } from 'react-hook-form';
@@ -64,6 +67,9 @@ const ManageRestaurantForm = ({ onSave, isLoading }: Props) => {
         <CuisinesSection />
         <Separator />
         <MenuSection />
+        <Separator />
+        <ImageSection />
+        {isLoading ? <LoadingButton /> : <Button type='submit'>Submit</Button>}
       </form>
     </Form>
   );
