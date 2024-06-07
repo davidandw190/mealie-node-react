@@ -1,6 +1,7 @@
 import CuisinesSection from './CuisinesSection';
 import DetailsSection from './DetailsSection';
 import { Form } from '@/components/ui/form';
+import MenuSection from './MenuSection';
 import { Separator } from '@/components/ui/separator';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -61,6 +62,8 @@ const ManageRestaurantForm = ({ onSave, isLoading }: Props) => {
         <DetailsSection />
         <Separator />
         <CuisinesSection />
+        <Separator />
+        <MenuSection />
       </form>
     </Form>
   );
