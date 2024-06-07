@@ -39,7 +39,7 @@ const formSchema = z
     path: ['imageFile'],
   });
 
-type restaurantFormData = z.infer<typeof formSchema>;
+type RestaurantFormData = z.infer<typeof formSchema>;
 
 type Props = {
   onSave: (data: FormData) => void;
@@ -47,7 +47,7 @@ type Props = {
 };
 
 const ManageRestaurantForm = ({ onSave, isLoading }: Props) => {
-  const form = useForm<restaurantFormData>({
+  const form = useForm<RestaurantFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       deliveryPrice: 0,
@@ -57,7 +57,27 @@ const ManageRestaurantForm = ({ onSave, isLoading }: Props) => {
     },
   });
 
-  const onSubmit = (data: restaurantFormData) => {};
+  const onSubmit = (data: RestaurantFormData) => {
+    const formData = new FormData();
+
+    formData.append('restaurantName', data.restaurantName);
+    formData.append('city', data.city);
+    formData.append('country', data.country);
+    formData.append('deliveryPrice', (data.deliveryPrice * 100).toString());
+    formData.append('estimatedDeliveryTime', data.estimatedDeliveryTime.toString());
+    formData.append('cuisines', JSON.stringify(data.cuisines));
+    data.menuItems.forEach((menuItem, index) => {
+      formData.append(`menuItems[${index}].name`, menuItem.name);
+      formData.append(`menuItems[${index}].description`, menuItem.description);
+      formData.append(`menuItems[${index}].price`, (menuItem.price * 100).toString());
+    });
+
+    if (data.imageFile) {
+      formData.append(`imageFile`, data.imageFile);
+    }
+
+    onSave(formData);
+  };
 
   return (
     <Form {...form}>
