@@ -1,5 +1,4 @@
 import multer from 'multer';
-// @ts-ignore
 import multerS3 from 'multer-s3';
 import path from 'path';
 import s3 from '../config/aws.config';
@@ -12,17 +11,16 @@ const upload = multer({
     bucket: process.env.AWS_S3_BUCKET_NAME! as string,
     acl: 'public-read',
     contentType: multerS3.AUTO_CONTENT_TYPE,
-    // @ts-ignore
     key: (req, file, cb) => {
       const ext = path.extname(file.originalname);
       cb(null, `restaurant-images/${Date.now().toString()}${ext}`);
     },
   }),
   fileFilter: (req, file, cb) => {
-    if (allowedMimeTypes.includes(file.mimetype))  {
+    if (allowedMimeTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      // @ts-ignore
+      //@ts-ignore
       cb(new Error('Invalid file type. Only JPEG and PNG files are allowed.'), false);
     }
   },

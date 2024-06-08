@@ -1,6 +1,8 @@
+import { ObjectCannedACL, PutObjectCommand, PutObjectCommandInput } from '@aws-sdk/client-s3';
 import { Request, Response } from 'express';
 
 import RestaurantModel from '../models/restaurant.model';
+import { Upload } from '@aws-sdk/lib-storage';
 import path from 'path';
 import s3 from '../config/aws.config';
 
@@ -29,7 +31,7 @@ export const registerRestaurant = async (req: Request, res: Response) => {
         .json({ message: "User already owns a restaurant" });
     }
 
-    let imageUrl: string | null = null;
+    let imageUrl: string | undefined = '';
     
     if (req.file) {
       imageUrl = await uploadImageToS3(req.file as Express.Multer.File);
@@ -51,21 +53,29 @@ export const registerRestaurant = async (req: Request, res: Response) => {
   }
 };
 
-const uploadImageToS3 = async (file: Express.Multer.File): Promise<string> => {
-  const params = {
+const uploadImageToS3 = async (file: Express.Multer.File): Promise<string | undefined> => {
+  const uploadParams: PutObjectCommandInput = {
     Bucket: process.env.AWS_S3_BUCKET_NAME!,
     Key: `restaurant-images/${Date.now().toString()}${path.extname(file.originalname)}`,
     Body: file.buffer,
     ContentType: file.mimetype,
-    ACL: 'public-read',
+    ACL: 'public-read' as ObjectCannedACL,
   };
 
   try {
-    const data = await s3.upload(params).promise();
-    return data.Location;
+    const parallelUploads3 = new Upload({
+      client: s3,
+      params: uploadParams,
+    });
+
+    parallelUploads3.on('httpUploadProgress', (progress) => {
+      console.log(progress);
+    });
+
+    const data = await parallelUploads3.done();
+    return data?.Location || '';
   } catch (error) {
     throw new Error('Image upload failed');
   }
-
 };
 
