@@ -1,7 +1,10 @@
-import ManageRestaurantForm from "@/forms/manage-restaurant-form/ManageRestaurantForm"
+import ManageRestaurantForm from '@/forms/manage-restaurant-form/ManageRestaurantForm';
+import { useRegisterRestaurant } from '@/api/RestaurantAPI';
 
 const ManageRestaurantPage = () => {
-  return (<ManageRestaurantForm onSave={console.log} isLoading={false} />)
-}
+  const { registerRestaurant, isLoading } = useRegisterRestaurant();
+
+  return <ManageRestaurantForm onSave={registerRestaurant} isLoading={isLoading} />;
+};
 
 export default ManageRestaurantPage;
