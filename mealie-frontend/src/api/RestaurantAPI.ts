@@ -11,7 +11,7 @@ export const useRegisterRestaurant = () => {
   const createRestaurantRequest = async (restaurantFormData: FormData): Promise<Restaurant> => {
     const accessToken = await getAccessTokenSilently();
     
-    const response = await fetch(`${API_BASE_URL}/api/restaurants`, {
+    const response = await fetch(`${API_BASE_URL}/api/restaurants/owned`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,

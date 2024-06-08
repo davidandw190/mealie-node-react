@@ -4,6 +4,21 @@ import RestaurantModel from '../models/restaurant.model';
 import path from 'path';
 import s3 from '../config/aws.config';
 
+export const retrieveOwnedRestaurantDetails = async (req: Request, res: Response) => {
+  try {
+    const ownedRestaurant = await RestaurantModel.findOne({ owner: req.userId });
+
+    if (!ownedRestaurant) {
+      return res.status(404).json({ message: 'Restaurant not found' });
+    }
+
+    res.json(ownedRestaurant);
+  } catch (error) {
+    console.log("error", error);
+    res.status(500).json({ message: "Error fetching owned restaurant details" });
+  }
+};
+
 export const registerRestaurant = async (req: Request, res: Response) => {
   try {
     const existingRestaurant = await RestaurantModel.findOne({ owner: req.userId });
