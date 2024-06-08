@@ -26,8 +26,13 @@ export const useRetrieveOwnedRestaurant = () => {
     return response.json();
   };
 
-  const { data: ownedRestaurant, isLoading, isSuccess, error } = useQuery('fetchOwnedRestaurant', retrieveOwnedRestaurantRequest);
-  
+  const {
+    data: ownedRestaurant,
+    isLoading,
+    isSuccess,
+    error,
+  } = useQuery('fetchOwnedRestaurant', retrieveOwnedRestaurantRequest);
+
   if (error) {
     console.error(error);
     toast.error('Failed to retrieve owned restaurant');
@@ -35,7 +40,6 @@ export const useRetrieveOwnedRestaurant = () => {
 
   return { ownedRestaurant, isLoading, isSuccess };
 };
-
 
 export const useRegisterRestaurant = () => {
   const { getAccessTokenSilently } = useAuth0();
@@ -71,4 +75,40 @@ export const useRegisterRestaurant = () => {
   }
 
   return { registerRestaurant, isLoading, isSuccess };
+};
+
+export const useUpdateRestaurant = () => {
+  const { getAccessTokenSilently } = useAuth0();
+
+  const updateRestaurantRequest = async (restaurantFormData: FormData): Promise<Restaurant> => {
+    const accessToken = await getAccessTokenSilently();
+
+    const response = await fetch(`${API_BASE_URL}/api/restaurants/owned`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: restaurantFormData,
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update restaurant');
+    }
+
+    return response.json();
+  };
+
+  const {
+    mutate: updateRestaurant,
+    isLoading,
+    isSuccess,
+    error,
+  } = useMutation(updateRestaurantRequest);
+
+  if (error) {
+    console.error(error);
+    toast.error('Failed to update restaurant');
+  }
+
+  return { updateRestaurant, isLoading, isSuccess };
 };

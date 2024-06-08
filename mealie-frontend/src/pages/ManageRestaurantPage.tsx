@@ -1,17 +1,24 @@
-import { useRegisterRestaurant, useRetrieveOwnedRestaurant } from '@/api/RestaurantAPI';
+import {
+  useRegisterRestaurant,
+  useRetrieveOwnedRestaurant,
+  useUpdateRestaurant,
+} from '@/api/RestaurantAPI';
 
 import ManageRestaurantForm from '@/forms/manage-restaurant-form/ManageRestaurantForm';
 
 const ManageRestaurantPage = () => {
-  const { ownedRestaurant, isLoading: fetchIsLoading } = useRetrieveOwnedRestaurant();
-  const { registerRestaurant, isLoading: postIsLoading } = useRegisterRestaurant();
+  const { ownedRestaurant, isLoading: isFetchLoading } = useRetrieveOwnedRestaurant();
+  const { registerRestaurant, isLoading: isRegisterLoading } = useRegisterRestaurant();
+  const { updateRestaurant, isLoading: isUpdateLoading } = useUpdateRestaurant();
 
-  return fetchIsLoading ? (
+  const isEditingExistingRestaurant = !!ownedRestaurant;
+
+  return isFetchLoading ? (
     <div>Loading...</div>
   ) : (
     <ManageRestaurantForm
-      onSave={registerRestaurant}
-      isLoading={postIsLoading}
+      onSave={isEditingExistingRestaurant ? updateRestaurant : registerRestaurant}
+      isLoading={isRegisterLoading || isUpdateLoading}
       ownedRestaurant={ownedRestaurant}
     />
   );
