@@ -1,12 +1,13 @@
 import { jwtCheck, jwtParse } from '../middleware/auth.middleware';
-import { registerRestaurant, retrieveOwnedRestaurantDetails } from '../resources/restaurant.resource';
+import { registerRestaurant, retrieveOwnedRestaurantDetails, updateRestaurant } from '../resources/restaurant.resource';
 
 import express from 'express';
-import jwt from 'jsonwebtoken';
 import uploadImage from '../middleware/upload.middleware';
 import { validateRegisterRestaurantRequest } from '../middleware/validation.middleware';
 
 const router = express.Router();
+
+router.get('/owned/', jwtCheck, jwtParse, retrieveOwnedRestaurantDetails);
 
 router.post(
   '/owned/',
@@ -17,6 +18,13 @@ router.post(
   registerRestaurant,
 );
 
-router.get('/owned/', jwtCheck, jwtParse, retrieveOwnedRestaurantDetails);
+router.put(
+  '/owned/',
+  uploadImage.single('imageFile'),
+  validateRegisterRestaurantRequest,
+  jwtCheck,
+  jwtParse,
+  updateRestaurant,
+);
 
 export default router;

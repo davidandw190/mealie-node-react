@@ -53,6 +53,37 @@ export const registerRestaurant = async (req: Request, res: Response) => {
   }
 };
 
+export const updateRestaurant = async (req: Request, res: Response) => {
+  try {
+    const restaurant = await RestaurantModel.findOne({ owner: req.userId });
+
+    if (!restaurant) {
+      return res.status(404).json({ message: 'Restaurant not found' });
+    }
+
+    restaurant.restaurantName = req.body.restaurantName;
+    restaurant.city = req.body.city;
+    restaurant.country = req.body.country;
+    restaurant.deliveryPrice = req.body.deliveryPrice;
+    restaurant.estimatedDeliveryTime = req.body.estimatedDeliveryTime;
+    restaurant.cuisines = req.body.cuisines;
+    restaurant.menuItems = req.body.menuItems;
+    restaurant.updatedAt = new Date();
+
+    if (req.file) {
+      restaurant.imageUrl = await uploadImageToS3(req.file as Express.Multer.File);
+    }
+
+    await restaurant.save();
+
+    res.status(200).send(restaurant);
+  } catch (error) {
+    console.error('Error updating restaurant:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  
+  }
+}
+
 const uploadImageToS3 = async (file: Express.Multer.File): Promise<string | undefined> => {
   const uploadParams: PutObjectCommandInput = {
     Bucket: process.env.AWS_S3_BUCKET_NAME!,
