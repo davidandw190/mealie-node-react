@@ -112,3 +112,31 @@ export const useUpdateRestaurant = () => {
 
   return { updateRestaurant, isLoading, isSuccess };
 };
+
+export const useSearchRestaurants = (city?: string) => {
+  const createSearchRequest = async (): Promise<Restaurant[]> => {
+    const response = await fetch(`${API_BASE_URL}/api/restaurants/search/${city}`, {
+      method: 'GET',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to search for restaurants');
+    }
+
+    return response.json();
+  };
+
+  const {
+    data: results,
+    isLoading,
+    isSuccess,
+    error,
+  } = useQuery(['searchRestaurants'], createSearchRequest, { enabled: !!city });
+
+  if (error) {
+    console.error(error);
+    toast.error('Failed to search for restaurants');
+  }
+
+  return { results, isLoading, isSuccess };
+};
