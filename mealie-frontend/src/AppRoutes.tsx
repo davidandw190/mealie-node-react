@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import Layout from './layouts/layout';
 import ManageRestaurantPage from './pages/ManageRestaurantPage';
 import ProtectedRoute from './auth/ProtectedRoute';
+import SearchPage from './pages/SearchPage';
 import UserProfilePage from './pages/UserProfilePage';
 
 const AppRoutes = () => {
@@ -39,6 +40,15 @@ const AppRoutes = () => {
           }
         />
       </Route>
+
+      <Route
+        path='/search/:city'
+        element={
+          <Layout showHero={false}>
+            <SearchPage />
+          </Layout>
+        }
+      ></Route>
 
       <Route path='/about' element={<span>About Page</span>} />
       <Route path='*' element={<Navigate to='/' />} />
