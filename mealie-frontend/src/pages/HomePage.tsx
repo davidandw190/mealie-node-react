@@ -1,7 +1,17 @@
+import SearchBar, { SearchForm } from '@/components/SearchBar';
+
 import appDownloadImage from '../assets/appDownload.png';
 import landingImage from '../assets/landing.png';
+import path from 'path';
+import { useNavigate } from 'react-router-dom';
 
-const HomePage = () => {
+const HomePage: React.FC = () => {
+  const navigate = useNavigate();
+  
+  const handleSubmit = (searchFormData: SearchForm) => {
+    navigate({pathname: path.join('/search', searchFormData.searchQuery)})
+  };
+
   return (
     <div className='flex flex-col gap-12'>
       <div className='bg-white rounded-1g shadow-md py-8 flex flex-col gap-5 text-center'>
@@ -9,6 +19,7 @@ const HomePage = () => {
           Tuck into a takeaway today
         </h1>
         <span className='text-x1'>Food is just one click away!</span>
+        <SearchBar placeholder='Search by City or Town' onSubmit={handleSubmit} />
       </div>
       <div className='grid md:grid-cols-2 gap-5'>
         <img src={landingImage} />
