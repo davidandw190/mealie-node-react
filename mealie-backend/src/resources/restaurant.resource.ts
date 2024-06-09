@@ -16,8 +16,65 @@ export const retrieveOwnedRestaurantDetails = async (req: Request, res: Response
 
     res.json(ownedRestaurant);
   } catch (error) {
-    console.log("error", error);
-    res.status(500).json({ message: "Error fetching owned restaurant details" });
+    console.log('error', error);
+    res.status(500).json({ message: 'Error fetching owned restaurant details' });
+  }
+};
+
+export const searchRestaurants = async (req: Request, res: Response) => {
+  try {
+    const city = req.params.city;
+
+    const searchQuery = (req.query.searchQuery as string) || '';
+    const selectedCuisines = (req.query.selectedCuisines as string) || '';
+    const sortOption = (req.query.sortOption as string) || 'updatedAt';
+    const page = parseInt(req.query.page as string) || 1;
+    const pageSize = parseInt(req.query.pageSize as string) || 10;
+    const skip = (page - 1) * pageSize;
+    let query: any = {};
+
+    query['city'] = new RegExp(city, 'i');
+    const cityCheck = await RestaurantModel.countDocuments(query);
+    if (cityCheck === 0) {
+      return res.status(404).json({
+        data: [],
+        pagination: {
+          total: 0,
+          page: 1,
+          pages: 1,
+        },
+      });
+    }
+
+    if (selectedCuisines) {
+      const cuisinesArray = selectedCuisines.split(',').map((cuisine) => new RegExp(cuisine, 'i'));
+      query['cuisines'] = { $all: cuisinesArray };
+    }
+
+    if (searchQuery) {
+      const searchRegex = new RegExp(searchQuery, 'i');
+      query['$or'] = [{ resturantName: searchRegex }, { cuisines: { $in: [searchRegex] } }];
+    }
+
+    const restaurants = await RestaurantModel.find(query)
+      .sort({ [sortOption]: 1 })
+      .skip(skip)
+      .limit(pageSize)
+      .lean();
+
+    const response = {
+      data: restaurants,
+      pagination: {
+        total: restaurants.length,
+        page,
+        pages: Math.ceil(restaurants.length / pageSize),
+      },
+    };
+
+    return res.status(200).json(response);
+  } catch (error) {
+    console.error('Error searching restaurants:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 
@@ -26,13 +83,11 @@ export const registerRestaurant = async (req: Request, res: Response) => {
     const existingRestaurant = await RestaurantModel.findOne({ owner: req.userId });
 
     if (existingRestaurant) {
-      return res
-        .status(409)
-        .json({ message: "User already owns a restaurant" });
+      return res.status(409).json({ message: 'User already owns a restaurant' });
     }
 
     let imageUrl: string | undefined = '';
-    
+
     if (req.file) {
       imageUrl = await uploadImageToS3(req.file as Express.Multer.File);
     }
@@ -44,9 +99,8 @@ export const registerRestaurant = async (req: Request, res: Response) => {
     });
 
     await newRestaurant.save();
-    
-    res.status(201).json({ message: "Restaurant registered successfully", restaurant: newRestaurant });
-    
+
+    res.status(201).json({ message: 'Restaurant registered successfully', restaurant: newRestaurant });
   } catch (error) {
     console.error('Error registering restaurant:', error);
     res.status(500).json({ message: 'Internal Server Error' });
@@ -80,9 +134,8 @@ export const updateRestaurant = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error updating restaurant:', error);
     res.status(500).json({ message: 'Internal Server Error' });
-  
   }
-}
+};
 
 const uploadImageToS3 = async (file: Express.Multer.File): Promise<string | undefined> => {
   const uploadParams: PutObjectCommandInput = {
@@ -109,4 +162,3 @@ const uploadImageToS3 = async (file: Express.Multer.File): Promise<string | unde
     throw new Error('Image upload failed');
   }
 };
-

@@ -12,9 +12,9 @@ export const getUser = async (req: Request, res: Response) => {
     res.json(user.toObject());
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: 'Internal Server Error'})
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
-}
+};
 
 export const createUser = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -63,4 +63,4 @@ export const updateUser = async (req: Request, res: Response) => {
     console.error('Error updating user:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
-}
+};
