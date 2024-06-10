@@ -28,18 +28,22 @@ export const useRetrieveAuthenticatedUser = () => {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
 
     if (!response.ok) {
-      throw new Error("Failed to fetch user");
+      throw new Error('Failed to fetch user');
     }
 
     return response.json();
   };
 
-  const { data: user, isLoading, error } = useQuery('fetchAuthenticatedUser', retrieveAuthenticatedUserRequest);
+  const {
+    data: user,
+    isLoading,
+    error,
+  } = useQuery('fetchAuthenticatedUser', retrieveAuthenticatedUserRequest);
 
   if (error) {
     console.error(error);
@@ -84,7 +88,7 @@ export const useCreateUser = () => {
 export const useUpdateUser = () => {
   const { getAccessTokenSilently } = useAuth0();
 
-  const updateUserRequest = async (formData: UpdateUserRequest) => {
+  const updateUserRequest = async (formData: UpdateUserRequest): Promise<User> => {
     const accessToken = await getAccessTokenSilently();
 
     const response = await fetch(`${API_BASE_URL}/api/users`, {
@@ -105,6 +109,7 @@ export const useUpdateUser = () => {
 
   const {
     mutateAsync: updateUser,
+    data: updatedUser,
     isLoading,
     error,
     isSuccess,
@@ -121,5 +126,5 @@ export const useUpdateUser = () => {
     reset();
   }
 
-  return { updateUser, isLoading, isSuccess };
+  return { updateUser, updatedUser, isLoading, isSuccess };
 };

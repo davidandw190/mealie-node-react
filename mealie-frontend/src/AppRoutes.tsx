@@ -8,9 +8,16 @@ import ProtectedRoute from './auth/ProtectedRoute';
 import SearchPage from './pages/SearchPage';
 import UserProfilePage from './pages/UserProfilePage';
 
+/**
+ * AppRoutes component defines all the routes for the application.
+ * This component uses React Router for client-side routing.
+ * 
+ * @component
+ */
 const AppRoutes = () => {
   return (
     <Routes>
+      {/* Public Routes */}
       <Route
         path='/'
         element={
@@ -20,7 +27,14 @@ const AppRoutes = () => {
         }
       />
       <Route path='/auth' element={<AuthCallbackPage />} />
+      <Route path='/about' element={<span>About Page</span>} />
+      <Route path='/search/:city' element={
+        <Layout showHero={false}>
+          <SearchPage />
+        </Layout>
+      } />
 
+      {/* Protected Routes */}
       <Route element={<ProtectedRoute />}>
         <Route
           path='/user-profile'
@@ -30,7 +44,6 @@ const AppRoutes = () => {
             </Layout>
           }
         />
-
         <Route
           path='/manage-restaurant'
           element={
@@ -41,16 +54,7 @@ const AppRoutes = () => {
         />
       </Route>
 
-      <Route
-        path='/search/:city'
-        element={
-          <Layout showHero={false}>
-            <SearchPage />
-          </Layout>
-        }
-      ></Route>
-
-      <Route path='/about' element={<span>About Page</span>} />
+      {/* Redirect any unknown routes to home */}
       <Route path='*' element={<Navigate to='/' />} />
     </Routes>
   );

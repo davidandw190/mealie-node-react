@@ -16,6 +16,7 @@ export const useRetrieveOwnedRestaurant = () => {
       headers: {
         method: 'GET',
         Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
       },
     });
 
@@ -87,6 +88,7 @@ export const useUpdateRestaurant = () => {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
       },
       body: restaurantFormData,
     });
@@ -117,6 +119,9 @@ export const useSearchRestaurants = (city?: string) => {
   const createSearchRequest = async (): Promise<RestaurantSearchResponse> => {
     const response = await fetch(`${API_BASE_URL}/api/restaurants/search/${city}`, {
       method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
     });
 
     if (!response.ok) {
