@@ -2,20 +2,19 @@ import SearchBar, { SearchForm } from '@/components/SearchBar';
 
 import appDownloadImage from '../assets/appDownload.png';
 import landingImage from '../assets/landing.png';
-import path from 'path';
 import { useNavigate } from 'react-router-dom';
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
-  
+
   const handleSubmit = (searchFormData: SearchForm) => {
-    navigate({pathname: path.join('/search', searchFormData.searchQuery)})
+    navigate({ pathname: `/search/${searchFormData.searchQuery}` });
   };
 
   return (
     <div className='flex flex-col gap-12'>
-      <div className="md:px-32 bg-white rounded-lg shadow-md py-8 flex flex-col gap-5 text-center -mt-16">
-      <h1 className="text-5xl font-bold tracking-tight text-orange-600">
+      <div className='md:px-32 bg-white rounded-lg shadow-md py-8 flex flex-col gap-5 text-center -mt-16'>
+        <h1 className='text-5xl font-bold tracking-tight text-orange-600'>
           Tuck into a takeaway today
         </h1>
         <span className='text-x1'>Food is just one click away!</span>

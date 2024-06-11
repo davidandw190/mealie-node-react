@@ -1,3 +1,4 @@
+import SearchResultCard from '@/components/SearchResultCard';
 import SearchResultsInfo from '@/components/SearchResultsInfo';
 import { useParams } from 'react-router-dom';
 import { useSearchRestaurants } from '@/api/RestaurantAPI';
@@ -22,6 +23,9 @@ const SearchPage = () => {
         </div>
         <div id='main-content' className='flex flex-col gap-5'>
             <SearchResultsInfo total={results.pagination.total} city={city} />
+            {results.data.map((restaurant) => (
+              <SearchResultCard restaurant={restaurant} key={restaurant._id} />
+            ))}
         </div>
     </div>
   );
