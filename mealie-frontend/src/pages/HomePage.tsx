@@ -8,7 +8,7 @@ const HomePage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleSubmit = (searchFormData: SearchForm) => {
-    navigate({ pathname: `/search/${searchFormData.searchQuery}` });
+    navigate({ pathname: `/search/${searchFormData.searchQuery.toString()}` });
   };
 
   return (
