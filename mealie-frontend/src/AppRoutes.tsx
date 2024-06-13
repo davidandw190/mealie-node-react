@@ -11,7 +11,7 @@ import UserProfilePage from './pages/UserProfilePage';
 /**
  * AppRoutes component defines all the routes for the application.
  * This component uses React Router for client-side routing.
- * 
+ *
  * @component
  */
 const AppRoutes = () => {
@@ -28,11 +28,22 @@ const AppRoutes = () => {
       />
       <Route path='/auth' element={<AuthCallbackPage />} />
       <Route path='/about' element={<span>About Page</span>} />
-      <Route path='/search/:city' element={
-        <Layout showHero={false}>
-          <SearchPage />
-        </Layout>
-      } />
+      <Route
+        path='/search/:city'
+        element={
+          <Layout showHero={false}>
+            <SearchPage />
+          </Layout>
+        }
+      />
+      <Route
+        path='/details/restaurantId'
+        element={
+          <Layout>
+            <RestaurantDetailsPage />
+          </Layout>
+        }
+      />
 
       {/* Protected Routes */}
       <Route element={<ProtectedRoute />}>
