@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import Layout from './layouts/layout';
 import ManageRestaurantPage from './pages/ManageRestaurantPage';
 import ProtectedRoute from './auth/ProtectedRoute';
+import RestaurantDetailsPage from './pages/RestaurantDetailsPage';
 import SearchPage from './pages/SearchPage';
 import UserProfilePage from './pages/UserProfilePage';
 

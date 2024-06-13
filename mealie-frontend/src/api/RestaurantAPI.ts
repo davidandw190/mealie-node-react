@@ -43,6 +43,32 @@ export const useRetrieveOwnedRestaurant = () => {
   return { ownedRestaurant, isLoading, isSuccess };
 };
 
+export const useRetrieveRestaurantDetails = (restaurantId?: string) => {
+  const getRestaurantByIdRequest = async (): Promise<Restaurant> => {
+    const response = await fetch(`${API_BASE_URL}/api/restaurants/${restaurantId}`);
+
+    if (!response.ok) {
+      throw new Error('Failed to retrieve restaurant details');
+    }
+
+    return response.json();
+  };
+
+  const {
+    data: restaurant,
+    isLoading,
+    isSuccess,
+    error,
+  } = useQuery('fetchRestaurantDetails', getRestaurantByIdRequest, { enabled: !!restaurantId });
+
+  if (error) {
+    console.error(error);
+    toast.error('Failed to retrieve restaurant details');
+  }
+
+  return { restaurant, isLoading, isSuccess };
+};
+
 export const useRegisterRestaurant = () => {
   const { getAccessTokenSilently } = useAuth0();
 
