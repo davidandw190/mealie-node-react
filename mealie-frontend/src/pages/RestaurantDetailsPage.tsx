@@ -1,6 +1,7 @@
 import { Card, CardFooter } from '@/components/ui/card';
 
 import { AspectRatio } from '@radix-ui/react-aspect-ratio';
+import CheckoutButton from '@/components/CheckoutButton';
 import { MenuItem } from '@/types/types';
 import MenuItemCard from '@/components/MenuItemCard';
 import OrderSummary from '@/components/OrderSummary';
@@ -49,6 +50,12 @@ const RestaurantDetailsPage = () => {
     });
   };
 
+  const removeFromCart = (removedCartItem: CartItem) => {
+    setCartItems(prevCartItems => {
+      return prevCartItems.filter(item => item._id != removedCartItem._id);
+    });
+  };
+
   if (isLoading || !restaurant) {
     return 'Loading...';
   }
@@ -75,7 +82,9 @@ const RestaurantDetailsPage = () => {
               removeFromCart={removeFromCart}
             />
             <CardFooter>
-              <span>CHECOUT BUTTON HRERE</span>
+              <span>
+                <CheckoutButton />
+              </span>
             </CardFooter>
           </Card>
         </div>
