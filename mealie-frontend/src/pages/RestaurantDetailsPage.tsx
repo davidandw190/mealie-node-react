@@ -40,10 +40,14 @@ const RestaurantDetailsPage = () => {
         </div>
 
         <div>
-          <Card>
-            <span>ORDER SUMMARY HERE</span>
+        <Card>
+            <OrderSummary
+              restaurant={restaurant}
+              cartItems={cartItems}
+              removeFromCart={removeFromCart}
+            />
             <CardFooter>
-              <span>CHECKOUT BUTTON HERE</span>
+              <span>CHECOUT BUTTON HRERE</span>
             </CardFooter>
           </Card>
         </div>
