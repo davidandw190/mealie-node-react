@@ -2,6 +2,7 @@ import { jwtCheck, jwtParse } from '../middleware/auth.middleware';
 import {
   registerRestaurant,
   retrieveOwnedRestaurantDetails,
+  retrieveRestaurantDetails,
   searchRestaurants,
   updateRestaurant,
 } from '../resources/restaurant.resource';
@@ -35,8 +36,18 @@ router.put(
 
 router.get(
   '/search/:city',
-  param('city').isString().trim().notEmpty().withMessage('City parameter must be a valid city name'),
+  param('city').isString().trim().notEmpty().withMessage('city parameter must be a valid city name'),
   searchRestaurants,
+);
+
+router.get(
+  '/:restaurantId',
+  param('restaurantId')
+    .isString()
+    .trim()
+    .notEmpty()
+    .withMessage('restaurantId parameter must be a valid id'),
+  retrieveRestaurantDetails,
 );
 
 export default router;
