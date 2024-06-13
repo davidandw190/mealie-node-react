@@ -20,7 +20,10 @@ export type CartItem = {
 const RestaurantDetailsPage = () => {
   const { restaurantId } = useParams();
   const { restaurant, isLoading } = useRetrieveRestaurantDetails(restaurantId);
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+    const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
+    return storedCartItems ? JSON.parse(storedCartItems) : [];
+  });
 
   const addToCart = (addedMenuItem: MenuItem) => {
     setCartItems(prevCartItems => {
@@ -46,13 +49,19 @@ const RestaurantDetailsPage = () => {
         ];
       }
 
+      sessionStorage.setItem(`cartItems=${restaurantId}`, JSON.stringify(updatedCartItems));
+
       return updatedCartItems;
     });
   };
 
   const removeFromCart = (removedCartItem: CartItem) => {
     setCartItems(prevCartItems => {
-      return prevCartItems.filter(item => item._id != removedCartItem._id);
+      const updatedCartItems = prevCartItems.filter(item => item._id != removedCartItem._id);
+
+      sessionStorage.setItem(`cartItems=${restaurantId}`, JSON.stringify(updatedCartItems));
+
+      return updatedCartItems;
     });
   };
 
