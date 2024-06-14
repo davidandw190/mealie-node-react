@@ -25,7 +25,7 @@ const formSchema = z.object({
   country: z.string().min(3, { message: 'Country must be at least 3 characters long' }),
 });
 
-type UserFormData = z.infer<typeof formSchema>;
+export type UserFormData = z.infer<typeof formSchema>;
 
 type Props = {
   onSubmit: (data: UserFormData) => void;
