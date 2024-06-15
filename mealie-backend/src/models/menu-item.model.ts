@@ -11,5 +11,5 @@ const menuItemSchema = new mongoose.Schema({
   price: { type: Number, required: true },
 });
 
-export type MenuItemType = InferSchemaType<typeof menuItemSchema>;
+export type MenuItem = InferSchemaType<typeof menuItemSchema>;
 export default menuItemSchema;
