@@ -38,7 +38,7 @@ export const createOrderCheckoutSession = async (req: Request, res: Response) =>
       lineItems,
       'TEST_ORDER_ID',
       targetRestaurant.deliveryPrice,
-      targetRestaurant._id.toString()
+      targetRestaurant._id.toString(),
     );
   } catch (error: any) {
     console.log(error);
@@ -59,8 +59,7 @@ const createOrderLineItems = (
       throw new Error(`Menu item not found: ${cartItem.menuItemId}`);
     }
 
-    // @ts-ignore
-    const line_item = (Stripe.Checkout.SessionCreateParams.LineItem = {
+    const line_item: Stripe.Checkout.SessionCreateParams.LineItem = {
       price_data: {
         currency: 'gbp',
         unit_amount: displyedMenuItem.price,
@@ -69,6 +68,42 @@ const createOrderLineItems = (
         },
       },
       quantity: parseInt(cartItem.quantity),
-    });
+    };
+
+    return line_item;
   });
+
+  return lineItems;
+};
+
+const createSession = async (
+  lineItems: Stripe.Checkout.SessionCreateParams.LineItem[],
+  orderId: string,
+  deliveryPrice: number,
+  restaurantId: string,
+) => {
+  const sessionData = await STRIPE.checkout.sessions.create({
+    line_items: lineItems,
+    shipping_options: [
+      {
+        shipping_rate_data: {
+          display_name: 'Delivery',
+          type: 'fixed_amount',
+          fixed_amount: {
+            amount: deliveryPrice,
+            currency: 'gbp',
+          },
+        },
+      },
+    ],
+    mode: 'payment',
+    metadata: {
+      orderId,
+      restaurantId,
+    },
+    success_url: `${FRONTEND_URL}/order-status?success=true`,
+    cancel_url: `${FRONTEND_URL}/detail/${restaurantId}?cancelled=true`,
+  });
+
+  return sessionData;
 };
