@@ -40,6 +40,10 @@ export const createOrderCheckoutSession = async (req: Request, res: Response) =>
       targetRestaurant.deliveryPrice,
       targetRestaurant._id.toString(),
     );
+
+    if (!session.url) {
+      return res.status(500).json({ message: 'Failed to create session' });
+    }
   } catch (error: any) {
     console.log(error);
     res.status(500).json({ message: error.raw.message });
@@ -49,7 +53,7 @@ export const createOrderCheckoutSession = async (req: Request, res: Response) =>
 const createOrderLineItems = (
   checkoutSessionRequest: OrderCheckoutSessionRequest,
   menuItems: MenuItem[],
-) => {
+): Stripe.Checkout.SessionCreateParams.LineItem[] => {
   const lineItems = checkoutSessionRequest.cartItems.map((cartItem) => {
     const displyedMenuItem = menuItems.find(
       (menuItem) => menuItem._id.toString() === cartItem.menuItemId.toString(),
@@ -81,7 +85,7 @@ const createSession = async (
   orderId: string,
   deliveryPrice: number,
   restaurantId: string,
-) => {
+): Promise<Stripe.Response<Stripe.Checkout.Session>> => {
   const sessionData = await STRIPE.checkout.sessions.create({
     line_items: lineItems,
     shipping_options: [
@@ -102,7 +106,7 @@ const createSession = async (
       restaurantId,
     },
     success_url: `${FRONTEND_URL}/order-status?success=true`,
-    cancel_url: `${FRONTEND_URL}/detail/${restaurantId}?cancelled=true`,
+    cancel_url: `${FRONTEND_URL}/details/${restaurantId}?cancelled=true`,
   });
 
   return sessionData;

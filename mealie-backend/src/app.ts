@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from "mongoose";
+import orderRoutes from './routes/order.routes';
 import restaurantRoutes from './routes/restaurant.routes';
 import userRoutes from './routes/user.routes';
 
@@ -27,6 +28,7 @@ mongoose.connect(`${process.env.DB_URI_LOCAL}`)
 
 app.use('/api/users', userRoutes);
 app.use('/api/restaurants', restaurantRoutes);
+app.use('/api/orderss', orderRoutes)
 
 const PORT = process.env.SERVER_PORT || 7002;
 app.listen(PORT, () => {
