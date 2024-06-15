@@ -30,6 +30,7 @@ export type UserFormData = z.infer<typeof formSchema>;
 type Props = {
   onSubmit: (data: UserFormData) => void;
   isLoading: boolean;
+  formTitle?: string;
   buttonText?: string;
   currentUser: User;
 };
@@ -37,7 +38,8 @@ type Props = {
 const UserProfileForm: React.FC<Props> = ({
   onSubmit,
   isLoading,
-  buttonText = 'Update Profile',
+  buttonText = 'Update',
+  formTitle = 'Update Profile',
   currentUser,
 }: Props) => {
   const form = useForm<UserFormData>({
@@ -56,7 +58,7 @@ const UserProfileForm: React.FC<Props> = ({
         className='space-y-4 bg-gray-50 rounded-lg md:p-10'
       >
         <div>
-          <h2 className='text-2x1 font-bold'> User Profile Form</h2>
+          <h2 className='text-2x1 font-bold'> {formTitle} </h2>
           <FormDescription>View and update your profile information below.</FormDescription>
         </div>
 

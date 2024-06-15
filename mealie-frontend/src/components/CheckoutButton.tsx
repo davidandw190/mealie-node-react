@@ -47,7 +47,7 @@ const CheckoutButton = ({ onCheckout, disabled }: Props) => {
         </Button>
       </DialogTrigger>
       <DialogContent className='max-w-[425px] md:min-w-[700px] bg-gray-50'>
-        <UserProfileForm currentUser={user} onSubmit={onCheckout} isLoading={isGetUserLoading} />
+        <UserProfileForm currentUser={user} onSubmit={onCheckout} isLoading={isGetUserLoading} formTitle='Confirm Delivery Details' buttonText='Continue To Payment'/>
       </DialogContent>
     </Dialog>
   );
